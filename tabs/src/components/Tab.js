@@ -3,16 +3,16 @@
 
 import React from 'react';
 import './App.css';
-import './Tab.css'
+import './Tab.css';
+import img from '../maprt.jpg';
 import { TeamsFx } from "@microsoft/teamsfx";
 import { Button, Table } from "@fluentui/react-northstar"
 
 import { Providers, ProviderState } from '@microsoft/mgt-element';
 import { PeoplePicker, Person, PersonViewType, PersonCardInteraction } from '@microsoft/mgt-react';
-import { CSVLink } from "react-csv";
-
 import { TeamsFxProvider } from '@microsoft/mgt-teamsfx-provider';
 import { CacheService } from '@microsoft/mgt';
+import ZoomImage from './ZoomImage';
 
 class Tab extends React.Component {
 
@@ -23,7 +23,7 @@ class Tab extends React.Component {
     this.state = {
       showLoginPage: undefined,
       selectedPeople: undefined,
-      tableHeader:['Name', 'Email', 'User Principal Name'],
+      tableHeader:['Name', 'Email', 'User Principal Name', 'Location'],
       tableRows:[],
       csvData: []
     }
@@ -102,10 +102,19 @@ class Tab extends React.Component {
               truncateContent: true,
               title: person.displayName,
             },
-            { content: person.mail, truncateContent: true, title: person.mail },
+            {
+              content: person.mail,
+              truncateContent: true,
+              title: person.mail
+            },
             {
               content: person.userPrincipalName,
               title: person.userPrincipalName,
+              truncateContent: true,
+            },
+            {
+              content: 'SHA-ZIZHU-BLD1/1707', //hardcoded
+              title: person.officeLocation,
               truncateContent: true,
             },
           ],
@@ -116,62 +125,27 @@ class Tab extends React.Component {
         tableRows: rows
       });
     };
-
-    const handleDownloadExcel = (e) => {
-      if (this.state.selectedPeople?.length > 0) {
-        this.setState({
-          csvData: [
-            this.state.tableHeader,
-            ...this.state.selectedPeople.map((person) => [
-              person.displayName,
-              person.userPrincipalName,
-              person.mail,
-            ]),
-          ],
-        });
-        return true;
-      }
-
-      alert("Please select at least one person to export contact info");
-      return false;
-    };
     
     return (
       <div>
         {this.state.showLoginPage === false && <div className="flex-container">
           <div className="features-col">
             <div className="features">
-                <div className="header">
-                  <div className="title">
-                    <h2>Current Login Account</h2>
-                  </div>
-                </div>
-
-              <div className="my-account-area">
-                <Person personQuery="me" view={PersonViewType.threelines}></Person>
-              </div>
 
               <div className="header">
                 <div className="title">
-
-                  <h2>Contact Table</h2>
-
+                  <h2>Campus Map</h2>
                 </div>
               </div>
 
               <div className="people-picker-area">
-                <PeoplePicker userType="user" selectionChanged={handleInputChange} placeholder="Typing name to select people to view contact info"></PeoplePicker>
+                <PeoplePicker userType="user" transitiveSearch="true" selectionChanged={handleInputChange} placeholder="Typing name to search people to view their campus location"></PeoplePicker>
               </div>
-
               <div className="table-area">
                 <Table  variables={{cellContentOverflow: 'none'}} header={this.state.tableHeader} rows={this.state.tableRows} aria-label="Static table" />
               </div>
-              <div className="export-btn-container">
-                <div className="export-btn">
-                    <CSVLink data={this.state.csvData} onClick={handleDownloadExcel} filename="contact.csv">
-                      <Button primary>Export Contact Table to Excel</Button>
-                    </CSVLink>
-                </div>
+              <div className="map">
+                {this.state.selectedPeople != undefined ? <ZoomImage image={img}></ZoomImage> : <h2 className="Welcome">Thank you for using Go There campus map</h2>}
               </div>
             </div>
           </div>

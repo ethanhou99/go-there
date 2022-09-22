@@ -5,7 +5,7 @@ body,
 
 .flex-container {
     display: flex;
-    max-width: 900px;
+    max-width: 100%;
     margin: auto;
 }
 
@@ -27,30 +27,41 @@ body,
 }
 
 .title {
-    margin: 20px;
+    margin: 16px;
     width: 100%;
+}
+
+.map {
+    margin: 10px;
+    max-width: 100%;
+    max-height: 100%;
 }
 
 .title h2 {
     margin: 0;
     font-size: 18px;
-    line-height: 24px;
+    line-height: 12%;
     display: inline;
     width: 100%;
 }
 
 .people-picker-area {
-    padding: 20px;
+    padding: 10px 20px 0px 20px;
     width: 100%;
 }
 
 .table-area{
-    margin: 20px;
-    padding-bottom: 100px;
-    height: 200px;
-    overflow: scroll;
+    margin: 10px 20px 10px 20px;
+    padding-bottom: 10px;
+    height: 98px;
     border: #8A8886;
     border-style: solid;
+}
+
+.welcome{
+    color: #6b6a69;
+    text-align: center;
+    padding: 50px
 }
 
 .export-btn-container{
